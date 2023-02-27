@@ -1,0 +1,49 @@
+{
+  "name": "vue-x6",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check build-only tsd",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit",
+    "tsd": "tsc -d --skipLibCheck --emitDeclarationOnly --jsx preserve --esModuleInterop --declarationDir dist src/lib/index.ts",
+    "preview": "vite preview"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "antv",
+    "x6",
+    "graph",
+    "svg",
+    "react",
+    "typescript"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "author": "lloydzhou",
+  "license": "MIT",
+  "homepage": "https://github.com/lloydzhou/vue-x6",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lloydzhou/vue-x6.git"
+  },
+  "peerDependencies": {
+    "@antv/x6": "^2.5.1",
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@antv/x6": "^2.5.1",
+    "@antv/x6-plugin-snapline": "^2.1.6",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0",
+    "vue": "^3.2.45",
+    "vue-tsc": "^1.0.24"
+  }
+}
