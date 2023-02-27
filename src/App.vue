@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Snapline } from "@antv/x6-plugin-snapline";
-import { Graph, Node, Edge, ElementOfPlugin } from './lib/index'
+import { Graph, Node, Edge, ElementOfPlugin } from 'vue-x6'
 const click = (e: any) => {
   console.log(e)
 }
