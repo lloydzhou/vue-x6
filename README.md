@@ -20,7 +20,7 @@ yarn add vue-x6
 
 ## demo
 
-[online demo](https://codesandbox.io/s/vue-x6-demo-nhogrp?file=/src/App.js)
+[online demo](https://codesandbox.io/p/github/lloydzhou/vue-x6/master?file=%2Fsrc%2FApp.vue)
 
 ```
 <script setup lang="ts">
