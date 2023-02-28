@@ -7,7 +7,7 @@
     "build": "run-p type-check build-only tsd",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "tsd": "tsc -d --skipLibCheck --emitDeclarationOnly --jsx preserve --esModuleInterop --declarationDir dist src/lib/index.ts",
+    "tsd": "tsc -d --skipLibCheck --emitDeclarationOnly --jsx preserve --esModuleInterop --lib es2017,DOM --declarationDir dist src/lib/index.ts",
     "preview": "vite preview"
   },
   "files": [
