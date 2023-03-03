@@ -36,7 +36,7 @@
     "vue": "^3.2.45"
   },
   "devDependencies": {
-    "@antv/x6": "^2.5.1",
+    "@antv/x6": "^2.5.2",
     "@antv/x6-plugin-snapline": "^2.1.6",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",

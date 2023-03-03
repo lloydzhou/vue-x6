@@ -39,10 +39,18 @@ const toggle = () => visible.value = !visible.value
   <button @click="toggle">显示/隐藏node2</button>
   <Graph grid>
     <SnaplinePlugin key="Snapline" />
-    <Node id="1" label="node1" :x="100" :y="100" :width="80" :height="40" @click="click" />
+    <Node id="1" label="node1" :x="100" :y="100" :width="80" :height="40" @click="click" >
+    </Node>
     <Node id="2" label="node2" :x="200" :y="200" :width="80" :height="40" @click="click" v-if="visible" />
     <Node id="3" label="node3" :x="200" :y="100" :width="80" :height="40" parent="1" @click="click" />
-    <Edge source="1" target="2" @click="click" />
+    <Edge v-if="visible" source="1" target="2" @click="click">
+      <EdgeTool name="button-remove" :args='{ x: 10, y: 10 }' />
+      <Label :attrs='{text: {text: "Hello Label1"}}' :position='{distance: 0.3}' />
+      <Label :attrs='{text: {text: "Hello Label3"}}' :position='{distance: 0.5}' />
+      <Label :attrs='{text: {text: "Hello Label2"}}' :position='{distance: 0.7}' />
+      <SourceMarker name="diamond" />
+      <TargetMarker name="ellipse" />
+    </Edge>
   </Graph>
 </template>
 ```
@@ -52,6 +60,14 @@ const toggle = () => visible.value = !visible.value
 - [x] Graph组件
 - [x] Node/Edge组件
 - [x] ElementOfPlugin函数方便封装官方plugin
-- [ ] NodePort
-- [ ] NodeTool/EdgeTool
+- [x] Label(Edge)
+- [x] NodePort
+- [x] NodeTool/EdgeTool
+- [x] SourceMarker/TargetMarker
+
+
+## TIP
+1. vue createRenderer中的createElement也通过包装一层传递root(graph)进去
+2. vue createRenderer传递patchProp，这里通过包装一个patchProps一次性更新整个props
+3. 这里patchProps中有延时逻辑，所以增加`updated:props`事件监听
 
