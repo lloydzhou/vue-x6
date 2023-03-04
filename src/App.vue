@@ -1,7 +1,7 @@
 <script setup lang="ts">
+// @ts-nocheck
 import { ref } from 'vue'
 import { Snapline } from "@antv/x6-plugin-snapline";
-// @ts-ignore
 import { Graph, Node, Edge, ElementOfPlugin } from 'vue-x6'
 import { SourceMarker, TargetMarker } from 'vue-x6'
 import { Label, EdgeTool, NodeTool, PortGroup, Port } from 'vue-x6'

@@ -49,6 +49,7 @@ export const Graph = defineComponent({
 
     const children = ref([])
     const idMap = ref(new Map())
+    // @ts-ignore
     const processChildren = (children: any[], prefix: string = '') => {
       // console.log('processChildren', children, prefix, idMap.value)
       return children.filter((i: any) => i.props).map((i: any) => {
@@ -159,18 +160,23 @@ const createPlugin = (Ctor: Function, newProps: AType, graph: X6Graph) => {
 }
 
 // labels/ports
-const createListInstance = (get, set, props, graph) => {
+const createListInstance = (get: any, set: any, props: AType, graph: X6Graph) => {
   const { id } = props
   // 使用id标记当前的对象
-  const instance = { id, cell: {}, props }
-  // update只是将newProps存起来，实际执行逻辑在updated:props里面执行
-  instance._update = (p) => instance.props = p
-  instance._insert = (c) => instance.cell = c
-  const handler = ({cell}) => {
-    // console.log('on updated:props', cell.id == instance.cell.id, cell.id, instance.cell.id, id)
+  const instance = {
+    id, cell: { id: '' }, props,
+    // update只是将newProps存起来，实际执行逻辑在updated:props里面执行
+    _update: (p: any) => instance.props = p,
+    _insert: (c: any) => instance.cell = c,
+    _remove: () => {
+      instance._update(null)
+      graph.off('updated:props', handler)
+    }
+  }
+  const handler = ({cell}: AType) => {
     if (instance.cell.id == cell.id) {
       const items = get(cell)
-      const i = items.findIndex(i => i.id === id)
+      const i = items.findIndex((i: any) => i.id === id)
       // 如果通过id找不到index，就认为在最后（类似push）
       const index = i === -1 ? items.length : i
       // 如果newProps为空，就表示移除当前配置
@@ -183,73 +189,74 @@ const createListInstance = (get, set, props, graph) => {
     }
   }
   graph.on('updated:props', handler)
-  instance._remove = () => {
-    instance._update(null)
-    graph.off('updated:props', handler)
-  }
   return instance
 }
 // label
-const createLabel = (props, graph) => createListInstance(
-  (edge) => edge.getLabels(),
-  (edge, labels) => edge.setLabels([...labels]),
+const createLabel = (props: AType, graph: X6Graph) => createListInstance(
+  (edge: X6Edge) => edge.getLabels(),
+  (edge: X6Edge, labels: any[]) => edge.setLabels([...labels]),
   props, graph
 )
 
-const createNamedInstance = (type, update, props, graph) => {
+const createNamedInstance = (type: string, update: Function, props: AType, graph: X6Graph) => {
   const { id, name } = props
-  const instance = { id, name, props, cell: {} }
-  instance._update = (p) => instance.props = p
-  instance._insert = (c) => instance.cell = c
-  const handler = ({cell}) => {
+  const instance = {
+    id, name, props, cell: {id: ''},
+    // @ts-ignore
+    _update: (p?: AType) => instance.props = p,
+    _insert: (c: any) => instance.cell = c,
+    _remove: () => {
+      instance._update()
+      graph.off('updated:props', handler)
+    }
+  }
+  const handler = ({cell}: AType) => {
     if (instance.cell.id == cell.id) {
       update(instance, cell, instance.props)
     }
   }
   graph.on('updated:props', handler)
-  instance._remove = () => {
-    instance._update(null)
-    graph.off('updated:props', handler)
-  }
   return instance
 }
 
 // marker: type=sourceMarker/targetMarker
-const createMarker = (type, props, graph) => createNamedInstance(type, (item, edge, newProps) => {
-  const lineAttr = edge.attr('line')
+const createMarker = (type: string, props: AType, graph: X6Graph) => createNamedInstance(type, (item: AType, edge: X6Edge, newProps: AType) => {
+  const lineAttr = edge.attr('line') as AType
   edge.attr('line', { ...lineAttr, [type]: newProps })
 }, props, graph)
 
 // portgroup: type=group
-const createPortGroup = (type, props, graph) => createNamedInstance(type, (item, node, newProps) => {
+const createPortGroup = (type: string, props: AType, graph: X6Graph) => createNamedInstance(type, (item: AType, node: X6Node, newProps: AType) => {
     // dynamic set portgroup not working
+    // @ts-ignore
     const { port } = node
-    const groups = node.getPropByPath('ports/groups') || {}
+    const groups = (node.getPropByPath('ports/groups') || {}) as AType
     if (newProps) {
+      // @ts-ignore
       groups[item.name] = port.parseGroup(newProps)
     } else {
       delete groups[item.name]
     }
     node.setPropByPath('ports/groups', {...groups})
 }, props, graph)
-const createPort = (props, graph) => createListInstance(
-  (node) => node.getPorts(), // getPorts return ObjectExt.cloneDeep
-  (node, ports) => {
+const createPort = (props: AType, graph: X6Graph) => createListInstance(
+  (node: X6Node) => node.getPorts(), // getPorts return ObjectExt.cloneDeep
+  (node: X6Node, ports: AType[]) => {
     node.setPropByPath('ports/items', ports)
   },
   props, graph
 )
 
 // nodetools/edgetools
-const createTool = (props, graph) => createListInstance(
-  (cell) => {
+const createTool = (props: AType, graph: X6Graph) => createListInstance(
+  (cell: any) => {
     const tools = cell.getTools()
     if (tools && tools.items) {
       return tools.items
     }
     return tools || []
   },
-  (cell, tools) => cell.setTools(tools),
+  (cell: any, tools: AType[]) => cell.setTools(tools),
   props, graph
 )
 
@@ -258,12 +265,19 @@ const createTool = (props, graph) => createListInstance(
 export const Node = ElementOf("Node", createCell.bind(null, X6Node.create, 'rect'))
 // @ts-ignore
 export const Edge = ElementOf("Edge", createCell.bind(null, X6Edge.create, 'edge'))
+// @ts-ignore
 export const SourceMarker = ElementOf("SourceMarker", createMarker.bind(null, 'sourceMarker'))
+// @ts-ignore
 export const TargetMarker = ElementOf("TargetMarker", createMarker.bind(null, 'targetMarker'))
+// @ts-ignore
 export const PortGroup = ElementOf("PortGroup", createPortGroup.bind(null, 'group'))
+// @ts-ignore
 export const Label = ElementOf("Label", createLabel)
+// @ts-ignore
 export const Port = ElementOf("Port", createPort)
+// @ts-ignore
 export const EdgeTool = ElementOf("EdgeTool", createTool)
+// @ts-ignore
 export const NodeTool = ElementOf("NodeTool", createTool)
 
 export function ElementOfPlugin(name: string, type: any) {
