@@ -5,6 +5,17 @@ import { Snapline } from "@antv/x6-plugin-snapline";
 import { Graph, Node, Edge, ElementOfPlugin } from 'vue-x6'
 import { SourceMarker, TargetMarker } from 'vue-x6'
 import { Label, EdgeTool, NodeTool, PortGroup, Port } from 'vue-x6'
+import { register, getTeleport } from "@antv/x6-vue-shape";
+import ProgressNode from "./ProgressNode.vue";
+
+
+register({
+  shape: "custom-vue-node",
+  width: 100,
+  height: 100,
+  component: ProgressNode,
+});
+const TeleportContainer = getTeleport();
 
 const click = (e: any) => {
   console.log(e)
@@ -15,6 +26,7 @@ const toggle = () => visible.value = !visible.value
 </script>
 
 <template>
+  <TeleportContainer />
   <button @click="toggle">显示/隐藏node2</button>
   <Graph grid>
     <SnaplinePlugin key="Snapline" />
@@ -36,6 +48,8 @@ const toggle = () => visible.value = !visible.value
       <SourceMarker name="diamond" />
       <TargetMarker name="ellipse" />
     </Edge>
+    <Node id="100" label="path" :x="400" :y="200" :width="80" :height="80" shape="path" path="M 0 5 10 0 C 20 0 20 20 10 20 L 0 15 Z" :attrs="{body: {fill: '#efdbff', stroke: '#9254de'}}" />
+    <Node shape="custom-vue-node" :x="400" :y="100" />
   </Graph>
 </template>
 
