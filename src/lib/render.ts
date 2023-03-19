@@ -10,7 +10,6 @@ export function ElementOf<Element, T extends string>(type: T, Ctor: () => any): 
 
 export const getRender = (graph) => {
   let timer
-  const prevProps = new Map()
   const nextProps = new Map()
   // 通过包装一下，将_update变成和react-reconciler中的commitUpdate类似的更新旧值和新值
   const patchProp = (el, key, prevValue, nextValue) => {

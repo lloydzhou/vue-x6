@@ -8,7 +8,6 @@ import { Label, EdgeTool, NodeTool, PortGroup, Port } from 'vue-x6'
 import { register, getTeleport } from "@antv/x6-vue-shape";
 import ProgressNode from "./ProgressNode.vue";
 
-
 register({
   shape: "custom-vue-node",
   width: 100,

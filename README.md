@@ -55,6 +55,28 @@ const toggle = () => visible.value = !visible.value
 </template>
 ```
 
+### x6-vue-shape demo
+```
+import { register, getTeleport } from "@antv/x6-vue-shape";
+import ProgressNode from "./ProgressNode.vue";
+
+register({
+  shape: "custom-vue-node",
+  width: 100,
+  height: 100,
+  component: ProgressNode,
+});
+
+const TeleportContainer = getTeleport();
+
+<template>
+  <TeleportContainer />
+  <Graph grid>
+    <Node shape="custom-vue-node" :x="400" :y="100" />
+  </Graph>
+</template>
+```
+
 ## TODO
 - [x] 提供渲染器
 - [x] Graph组件
