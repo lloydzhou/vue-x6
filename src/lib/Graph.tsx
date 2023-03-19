@@ -110,7 +110,8 @@ export const Graph = defineComponent({
 
 const createCell = (Ctor: Function, shape: string, newProps: AType, graph: X6Graph) => {
   const { props={}, events={} } = processProps(newProps)
-  const node = Ctor(newProps)
+  // 使用默认的shape='rect'，同时props.shape会覆盖
+  const node = Ctor({shape, ...props})
   node._remove = () => {
     node._removeEvent()
     graph.model.removeCell(node)

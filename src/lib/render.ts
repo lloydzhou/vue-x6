@@ -20,7 +20,8 @@ export const getRender = (graph) => {
     nextProps.set(el.id, {...props, [key]: nextValue})
     timer = setTimeout(() => {
       el._update(nextProps.get(el.id) || {})
-      nextProps.set(el.id, {})
+      // patchProp只会更新有变动的，所以不能将旧的props清空
+      // nextProps.set(el.id, {})
     }, 1)
   }
   // https://vuejs.org/api/custom-renderer.html#createrenderer
