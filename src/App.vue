@@ -22,6 +22,7 @@ const click = (e: any) => {
 const SnaplinePlugin = ElementOfPlugin('Snapline', Snapline)
 const visible = ref(true)
 const toggle = () => visible.value = !visible.value
+const nodes = [1,2,3,4,5].map(i => ({id: `id:${i}`, label: `node:${i}`, x: 250 + i * 50, y: 200 + i * 50}))
 </script>
 
 <template>
@@ -49,6 +50,7 @@ const toggle = () => visible.value = !visible.value
     </Edge>
     <Node id="100" label="path" :x="400" :y="200" :width="80" :height="80" shape="path" path="M 0 5 10 0 C 20 0 20 20 10 20 L 0 15 Z" :attrs="{body: {fill: '#efdbff', stroke: '#9254de'}}" />
     <Node shape="custom-vue-node" :x="400" :y="100" />
+    <Node :id="node.id" :label="node.label" :x="node.x" :y="node.y" :width="100" :height="40" v-for="node in nodes" />
   </Graph>
 </template>
 

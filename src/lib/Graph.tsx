@@ -52,10 +52,10 @@ export const Graph = defineComponent({
     // @ts-ignore
     const processChildren = (children: any[], prefix: string = '') => {
       // console.log('processChildren', children, prefix, idMap.value)
-      return children.filter((i: any) => i.props).map((i: any) => {
+      return children.map((i: any) => {
         // 将key重置，不更改props这些信息
         const { props={}, type, children=[] } = i
-        const { id } = props
+        const { id } = props || {}
         const hash = StringExt.hashcode(JSON.stringify(props))
         let key = (id && `${prefix}:${type}:${id}`) || (id && idMap.value.get(`${prefix}:${type}:${id}`)) || idMap.value.get(`${prefix}:${hash}`)
         if (!key) {
