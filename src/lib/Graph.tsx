@@ -1,5 +1,5 @@
 import { Graph as X6Graph, Node as X6Node, Edge as X6Edge, ObjectExt, StringExt } from '@antv/x6'
-import { defineComponent, onMounted, onUnmounted, ref, shallowReactive, h, nextTick } from 'vue'
+import { defineComponent, onMounted, onUnmounted, ref, shallowReactive, h, nextTick, Fragment } from 'vue'
 import { ElementOf, getRender } from './render'
 import type { DefineComponent, Ref } from 'vue'
 
@@ -52,7 +52,7 @@ export const Graph = defineComponent({
     // @ts-ignore
     const processChildren = (children: any[], prefix: string = '') => {
       // console.log('processChildren', children, prefix, idMap.value)
-      return children.map((i: any) => {
+      return children.filter((i: any) => i.type == Fragment || i.props).map((i: any) => {
         // 将key重置，不更改props这些信息
         const { props={}, type, children=[] } = i
         const { id } = props || {}
@@ -72,7 +72,10 @@ export const Graph = defineComponent({
           {...props, id: id || key, key},
           children && processChildren(children, key),
         )
-      }).filter((i: any) => i.key)
+      }).filter((i: any) => i.key).reduce((res: any[], vnode: any) => {
+        // 将Fragment内部children拉平，移除Fragment节点本身
+        return res.concat(vnode.type === Fragment ? vnode.children : vnode)
+      }, [])
     }
     expose(context)
     onMounted(() => {

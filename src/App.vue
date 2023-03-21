@@ -33,15 +33,11 @@ const nodes = [1,2,3,4,5].map(i => ({id: `id:${i}`, label: `node:${i}`, x: 250 +
     <Node id="1" label="node1" :x="100" :y="100" :width="80" :height="40" @click="click" >
       <PortGroup name="group1" :position='{name: "top"}' />
       <PortGroup name="group2" :position='{name: "bottom"}' />
-      <Port group="group1" id="port1" />
-      <Port group="group1" id="port2" />
-      <Port group="group2" id="port3" />
-      <Port group="group2" id="port4" />
+      <Port :group="`group${Math.ceil(i/2)}`" :id="`port${i}`" v-for="i in [1,2,3,4]" />
     </Node>
     <Node id="2" label="node2" :x="200" :y="200" :width="80" :height="40" @click="click" v-if="visible" />
     <Node id="3" label="node3" :x="200" :y="100" :width="80" :height="40" parent="1" @click="click" />
     <Edge v-if="visible" source="1" target="2" @click="click">
-      <EdgeTool name="button-remove" :args='{ x: 10, y: 10 }' />
       <Label :attrs='{text: {text: "Hello Label1"}}' :position='{distance: 0.3}' />
       <Label :attrs='{text: {text: "Hello Label3"}}' :position='{distance: 0.5}' />
       <Label :attrs='{text: {text: "Hello Label2"}}' :position='{distance: 0.7}' />
@@ -51,6 +47,7 @@ const nodes = [1,2,3,4,5].map(i => ({id: `id:${i}`, label: `node:${i}`, x: 250 +
     <Node id="100" label="path" :x="400" :y="200" :width="80" :height="80" shape="path" path="M 0 5 10 0 C 20 0 20 20 10 20 L 0 15 Z" :attrs="{body: {fill: '#efdbff', stroke: '#9254de'}}" />
     <Node shape="custom-vue-node" :x="400" :y="100" />
     <Node :id="node.id" :label="node.label" :x="node.x" :y="node.y" :width="100" :height="40" v-for="node in nodes" />
+    <Node :id="node.id + 100" :label="node.label + 100" :x="node.x" :y="node.y" :width="100" :height="40" v-for="node in nodes" />
   </Graph>
 </template>
 
